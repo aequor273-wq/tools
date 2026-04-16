@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Cost Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card: #161616;
+    --text: #ffffff;
+    --dim: #777;
+    --accent: #a29bfe;
+    --border: #222;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 100; /* 極細フォント */
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+  }
+
+  .container { max-width: 1000px; margin: 0 auto; }
+  h1 { font-weight: 100; text-align: center; letter-spacing: 0.3em; font-size: 1.5rem; margin: 40px 0; color: var(--accent); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 30px;
+    transition: 0.3s;
+  }
+
+  .card-title { font-size: 1.1rem; margin-bottom: 25px; border-bottom: 1px solid var(--border); padding-bottom: 10px; font-weight: 300; }
+
+  label { display: block; font-size: 0.7rem; color: var(--dim); margin-bottom: 5px; letter-spacing: 0.1em; }
+
+  input, select {
+    width: 100%;
+    background: #000;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-weight: 300;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+
+  .res-box { margin-top: 30px; padding: 20px; border-top: 1px solid var(--border); }
+  .res-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 10px; color: var(--dim); }
+  .total-label { font-size: 1rem; color: var(--accent); }
+  .total-val { font-size: 1.6rem; color: var(--accent); font-weight: 100; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>CAR COST SIMULATOR</h1>
+  <div class="grid">
+    <div class="card" id="c1">
+      <div class="card-title">Vehicle 01</div>
+      <label>車両価格 (税込)</label>
+      <input type="number" class="p" value="2500000" oninput="calc()">
+      
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1">
+          <label>自動車税 (1年分)</label>
+          <select class="ta" onchange="calc()">
+            <option value="10800">軽自動車</option>
+            <option value="25000" selected>〜1000cc</option>
+            <option value="30500">〜1500cc</option>
+            <option value="36000">〜2000cc</option>
+            <option value="0">免税 (EV等)</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <label>重量税 (2年分)</label>
+          <select class="tw" onchange="calc()">
+            <option value="16400">〜1.0t</option>
+            <option value="24600" selected>〜1.5t</option>
+            <option value="32800">〜2.0t</option>
+            <option value="0">免税</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1">
+          <label>任意保険 (月額)</label>
+          <input type="number" class="iv" value="7000" oninput="calc()">
+        </div>
+        <div style="flex:1">
+          <label>駐車場 (月額)</label>
+          <input type="number" class="pk" value="10000" oninput="calc()">
+        </div>
+      </div>
+
+      <label>ガソリン代 (月額)</label>
+      <input type="number" class="f" value="8000" oninput="calc()">
+
+      <label>その他 (2年分/車検等)</label>
+      <input type="number" class="o" value="80000" oninput="calc()">
+
+      <div class="res-box">
+        <div class="res-row"><span>2年間の税金・保険合計</span><span class="r-tax">0</span></div>
+        <div class="res-row"><span>2年間の維持走行費</span><span class="r-run">0</span></div>
+        <div class="res-row" style="margin-top:10px;">
+          <span class="total-label">24ヶ月総額</span>
+          <span class="total-val"><span class="r-total">0</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="c2">
+      <div class="card-title">Vehicle 02</div>
+      <label>車両価格 (税込)</label>
+      <input type="number" class="p" value="3200000" oninput="calc()">
+      
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1">
+          <label>自動車税 (1年分)</label>
+          <select class="ta" onchange="calc()">
+            <option value="10800">軽自動車</option>
+            <option value="25000">〜1000cc</option>
+            <option value="30500">〜1500cc</option>
+            <option value="36000">〜2000cc</option>
+            <option value="0" selected>免税 (EV等)</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <label>重量税 (2年分)</label>
+          <select class="tw" onchange="calc()">
+            <option value="16400">〜1.0t</option>
+            <option value="24600">〜1.5t</option>
+            <option value="32800">〜2.0t</option>
+            <option value="0" selected>免税</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1">
+          <label>任意保険 (月額)</label>
+          <input type="number" class="iv" value="7000" oninput="calc()">
+        </div>
+        <div style="flex:1">
+          <label>駐車場 (月額)</label>
+          <input type="number" class="pk" value="10000" oninput="calc()">
+        </div>
+      </div>
+
+      <label>ガソリン代 (月額)</label>
+      <input type="number" class="f" value="2000" oninput="calc()">
+
+      <label>その他 (2年分/車検等)</label>
+      <input type="number" class="o" value="50000" oninput="calc()">
+
+      <div class="res-box">
+        <div class="res-row"><span>2年間の税金・保険合計</span><span class="r-tax">0</span></div>
+        <div class="res-row"><span>2年間の維持走行費</span><span class="r-run">0</span></div>
+        <div class="res-row" style="margin-top:10px;">
+          <span class="total-label">24ヶ月総額</span>
+          <span class="total-val"><span class="r-total">0</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function calc() {
+  ['c1', 'c2'].forEach(id => {
+    const root = document.getElementById(id);
+    const p = parseInt(root.querySelector('.p').value) || 0;
+    const ta = (parseInt(root.querySelector('.ta').value) || 0) * 2;
+    const tw = parseInt(root.querySelector('.tw').value) || 0;
+    const iv = (parseInt(root.querySelector('.iv').value) || 0) * 24;
+    const pk = (parseInt(root.querySelector('.pk').value) || 0) * 24;
+    const f = (parseInt(root.querySelector('.f').value) || 0) * 24;
+    const o = parseInt(root.querySelector('.o').value) || 0;
+
+    const taxTotal = ta + tw + 17650 + o; // 自賠責込
+    const runTotal = iv + pk + f;
+    const total = p + taxTotal + runTotal;
+
+    root.querySelector('.r-tax').innerText = taxTotal.toLocaleString() + " 円";
+    root.querySelector('.r-run').innerText = runTotal.toLocaleString() + " 円";
+    root.querySelector('.r-total').innerText = total.toLocaleString();
+  });
+}
+window.onload = calc;
+</script>
+</body>
+</html>
