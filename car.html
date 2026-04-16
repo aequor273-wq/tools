@@ -3,25 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Car Cost Simulator Pro</title>
+<title>Car Cost Simulator Ultra</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300&display=swap" rel="stylesheet">
 <style>
     body { background: #0a0a0a; color: #fff; font-family: 'Noto Sans JP', sans-serif; padding: 20px; font-weight: 100; }
-    .container { max-width: 800px; margin: 0 auto; }
-    h1 { text-align: center; letter-spacing: 0.5em; color: #a29bfe; margin-bottom: 40px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { text-align: center; letter-spacing: 0.5em; color: #a29bfe; margin-bottom: 30px; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .card { background: #111; border: 1px solid #333; padding: 20px; border-radius: 15px; }
-    /* 名前を変更可能にする入力欄 */
-    .v-name { background: transparent; border: none; border-bottom: 1px solid #555; color: #a29bfe; font-size: 1.2rem; font-family: inherit; font-weight: 300; width: 100%; margin-bottom: 20px; text-align: center; }
+    .v-name { background: transparent; border: none; border-bottom: 1px solid #555; color: #a29bfe; font-size: 1.2rem; font-family: inherit; font-weight: 300; width: 100%; margin-bottom: 15px; text-align: center; }
     .v-name:focus { outline: none; border-color: #a29bfe; }
     
-    label { display: block; font-size: 0.8rem; margin-top: 15px; color: #888; }
-    select, input { width: 100%; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 5px; margin-top: 5px; font-family: inherit; box-sizing: border-box; }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 5px; }
+    select, input { width: 100%; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 5px; font-family: inherit; box-sizing: border-box; font-size: 0.9rem; }
+    
     .result { margin-top: 20px; padding-top: 15px; border-top: 1px dotted #444; }
-    .total-val { font-size: 1.8rem; color: #fab1a0; text-align: right; }
+    .total-label { font-size: 0.8rem; color: #aaa; }
+    .total-val { font-size: 2rem; color: #fab1a0; text-align: right; font-weight: 300; }
     .unit { font-size: 0.9rem; margin-left: 5px; }
-    .tax-info { font-size: 0.7rem; color: #666; text-align: right; margin-top: 5px; }
     .back-link { display: block; text-align: center; margin-top: 40px; color: #555; text-decoration: none; font-size: 0.8rem; }
+    
+    /* スマホ対応 */
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -33,74 +37,116 @@
         <div class="card">
             <input type="text" class="v-name" value="VEHICLE 1" oninput="calc()">
             
-            <label>自動車税 (排気量)</label>
-            <select id="tax1" onchange="calc()">
-                <option value="25000">軽自動車 (10,800円相当※概算)</option>
-                <option value="25000">〜1000cc (25,000円)</option>
-                <option value="30500">〜1500cc (30,500円)</option>
-                <option value="36000" selected>〜2000cc (36,000円)</option>
-                <option value="43500">〜2500cc (43,500円)</option>
-                <option value="50000">〜3000cc (50,000円)</option>
-                <option value="57000">〜3500cc (57,000円)</option>
-                <option value="65500">〜4000cc (65,500円)</option>
-                <option value="75500">〜4500cc (75,500円)</option>
-                <option value="87000">〜6000cc (87,000円)</option>
-                <option value="110000">6000cc超 (110,000円)</option>
-            </select>
+            <div class="input-group">
+                <label>自動車税 (排気量)</label>
+                <select id="tax1" onchange="calc()">
+                    <option value="10800">軽自動車 (10,800円)</option>
+                    <option value="25000">〜1000cc (25,000円)</option>
+                    <option value="30500">〜1500cc (30,500円)</option>
+                    <option value="36000" selected>〜2000cc (36,000円)</option>
+                    <option value="43500">〜2500cc (43,500円)</option>
+                    <option value="50000">〜3000cc (50,000円)</option>
+                    <option value="57000">〜3500cc (57,000円)</option>
+                    <option value="65500">〜4000cc (65,500円)</option>
+                    <option value="75500">〜4500cc (75,500円)</option>
+                    <option value="87000">〜6000cc (87,000円)</option>
+                    <option value="110000">6000cc超 (110,000円)</option>
+                </select>
+            </div>
 
-            <label>重量税 (2年分)</label>
-            <select id="weight1" onchange="calc()">
-                <option value="6600">軽自動車 (6,600円)</option>
-                <option value="16400">〜1.0t (16,400円)</option>
-                <option value="24600" selected>〜1.5t (24,600円)</option>
-                <option value="32800">〜2.0t (32,800円)</option>
-                <option value="41000">〜2.5t (41,000円)</option>
-                <option value="49200">〜3.0t (49,200円)</option>
-            </select>
+            <div class="input-group">
+                <label>重量税 (2年分)</label>
+                <select id="weight1" onchange="calc()">
+                    <option value="6600">軽自動車 (6,600円)</option>
+                    <option value="16400">〜1.0t (16,400円)</option>
+                    <option value="24600" selected>〜1.5t (24,600円)</option>
+                    <option value="32800">〜2.0t (32,800円)</option>
+                    <option value="41000">〜2.5t (41,000円)</option>
+                    <option value="49200">〜3.0t (49,200円)</option>
+                </select>
+            </div>
 
-            <label>その他月額費用 (保険・駐車場等)</label>
-            <input type="number" id="other1" value="20000" oninput="calc()">
+            <div class="input-group">
+                <label>実燃費 (km/L)</label>
+                <input type="number" id="eff1" value="12" oninput="calc()">
+            </div>
+
+            <div class="input-group">
+                <label>月間走行距離 (km)</label>
+                <input type="number" id="dist1" value="500" oninput="calc()">
+            </div>
+
+            <div class="input-group">
+                <label>ガソリン単価 (円/L)</label>
+                <input type="number" id="fuel1" value="170" oninput="calc()">
+            </div>
+
+            <div class="input-group">
+                <label>固定月額 (駐車場・保険等)</label>
+                <input type="number" id="fixed1" value="20000" oninput="calc()">
+            </div>
 
             <div class="result">
-                <div class="total-val" id="res1">0<span class="unit">円 /月</span></div>
-                <div class="tax-info">※税金は月割計算</div>
+                <div class="total-label">MONTHLY COST</div>
+                <div class="total-val" id="res1">0<span class="unit">円</span></div>
             </div>
         </div>
 
         <div class="card">
             <input type="text" class="v-name" value="VEHICLE 2" oninput="calc()">
             
-            <label>自動車税 (排気量)</label>
-            <select id="tax2" onchange="calc()">
-                <option value="25000">軽自動車</option>
-                <option value="25000">〜1000cc</option>
-                <option value="30500">〜1500cc</option>
-                <option value="36000">〜2000cc</option>
-                <option value="43500">〜2500cc</option>
-                <option value="50000" selected>〜3000cc</option>
-                <option value="57000">〜3500cc</option>
-                <option value="65500">〜4000cc</option>
-                <option value="75500">〜4500cc</option>
-                <option value="87000">〜6000cc</option>
-                <option value="110000">6000cc超</option>
-            </select>
+            <div class="input-group">
+                <label>自動車税 (排気量)</label>
+                <select id="tax2" onchange="calc()">
+                    <option value="10800">軽自動車</option>
+                    <option value="25000">〜1000cc</option>
+                    <option value="30500">〜1500cc</option>
+                    <option value="36000">〜2000cc</option>
+                    <option value="43500">〜2500cc</option>
+                    <option value="50000" selected>〜3000cc</option>
+                    <option value="57000">〜3500cc</option>
+                    <option value="65500">〜4000cc</option>
+                    <option value="75500">〜4500cc</option>
+                    <option value="87000">〜6000cc</option>
+                    <option value="110000">6000cc超</option>
+                </select>
+            </div>
 
-            <label>重量税 (2年分)</label>
-            <select id="weight2" onchange="calc()">
-                <option value="6600">軽自動車</option>
-                <option value="16400">〜1.0t</option>
-                <option value="24600">〜1.5t</option>
-                <option value="32800" selected>〜2.0t</option>
-                <option value="41000">〜2.5t</option>
-                <option value="49200">〜3.0t</option>
-            </select>
+            <div class="input-group">
+                <label>重量税 (2年分)</label>
+                <select id="weight2" onchange="calc()">
+                    <option value="6600">軽自動車</option>
+                    <option value="16400">〜1.0t</option>
+                    <option value="24600">〜1.5t</option>
+                    <option value="32800" selected>〜2.0t</option>
+                    <option value="41000">〜2.5t</option>
+                    <option value="49200">〜3.0t</option>
+                </select>
+            </div>
 
-            <label>その他月額費用 (保険・駐車場等)</label>
-            <input type="number" id="other2" value="25000" oninput="calc()">
+            <div class="input-group">
+                <label>実燃費 (km/L)</label>
+                <input type="number" id="eff2" value="10" oninput="calc()">
+            </div>
+
+            <div class="input-group">
+                <label>月間走行距離 (km)</label>
+                <input type="number" id="dist2" value="500" oninput="calc()">
+            </div>
+
+            <div class="input-group">
+                <label>ガソリン単価 (円/L)</label>
+                <input type="number" id="fuel2" value="170" oninput="calc()">
+            </div>
+
+            <div class="input-group">
+                <label>固定月額 (駐車場・保険等)</label>
+                <input type="number" id="fixed2" value="25000" oninput="calc()">
+            </div>
 
             <div class="result">
-                <div class="total-val" id="res2">0<span class="unit">円 /月</span></div>
-                <div class="tax-info">※税金は月割計算</div>
+                <div class="total-label">MONTHLY COST</div>
+                <div class="total-val" id="res2">0<span class="unit">円</span></div>
             </div>
         </div>
     </div>
@@ -111,14 +157,20 @@
 <script>
 function calc() {
     for (let i = 1; i <= 2; i++) {
-        const tax = parseInt(document.getElementById('tax' + i).value);
-        const weight = parseInt(document.getElementById('weight' + i).value);
-        const other = parseInt(document.getElementById('other' + i).value) || 0;
+        const tax = parseInt(document.getElementById('tax' + i).value) || 0;
+        const weight = parseInt(document.getElementById('weight' + i).value) || 0;
+        const eff = parseFloat(document.getElementById('eff' + i).value) || 1;
+        const dist = parseFloat(document.getElementById('dist' + i).value) || 0;
+        const fuelPrice = parseFloat(document.getElementById('fuel' + i).value) || 0;
+        const fixed = parseFloat(document.getElementById('fixed' + i).value) || 0;
         
-        // 自動車税(12ヶ月割) + 重量税(24ヶ月割) + その他月額
-        const monthly = (tax / 12) + (weight / 24) + other;
+        // ガソリン代計算
+        const fuelCost = (dist / eff) * fuelPrice;
         
-        document.getElementById('res' + i).innerHTML = Math.round(monthly).toLocaleString() + '<span class="unit">円 /月</span>';
+        // 税金月割 + 固定費 + ガソリン代
+        const monthly = (tax / 12) + (weight / 24) + fixed + fuelCost;
+        
+        document.getElementById('res' + i).innerHTML = Math.round(monthly).toLocaleString() + '<span class="unit">円</span>';
     }
 }
 calc();
